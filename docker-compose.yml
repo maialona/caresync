@@ -1,0 +1,23 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    env_file:
+      - ./backend/.env
+    environment:
+      - PORT=8080
+      - DATABASE_URL=sqlite+aiosqlite:////app/carevisit.db
+      - SECRET_KEY=dev-secret-key-12345
+      - FRONTEND_URL=http://localhost,http://localhost:5173,http://127.0.0.1
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:8080"
+    depends_on:
+      - backend
