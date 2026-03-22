@@ -14,6 +14,7 @@ import {
   FolderOpen,
   CalendarCheck,
   History,
+  Lightbulb,
   type LucideIcon,
 } from "lucide-react";
 
@@ -47,10 +48,10 @@ function SidebarLink({ item, isAdmin }: { item: NavItem; isAdmin: boolean }) {
     <NavLink
       to={item.to}
       className={({ isActive }) =>
-        `flex items-center gap-3 rounded-xl px-3 py-3 text-sm font-semibold transition-all ${
+        `flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
           isActive
-            ? "bg-primary-500 text-gray-900 shadow-sm"
-            : "text-gray-500 hover:bg-surface-100 hover:text-gray-900"
+            ? "bg-primary-100 text-primary-800 font-semibold"
+            : "text-gray-500 hover:bg-surface-100 hover:text-gray-800"
         }`
       }
     >
@@ -68,13 +69,13 @@ function BottomTabLink({ item, isAdmin }: { item: NavItem; isAdmin: boolean }) {
       to={item.to}
       className={({ isActive }) =>
         `flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition-colors ${
-          isActive ? "text-gray-900" : "text-gray-400"
+          isActive ? "text-primary-700" : "text-gray-400"
         }`
       }
     >
       {({ isActive }) => (
         <>
-          <div className={`rounded-xl p-1.5 transition-colors ${isActive ? "bg-primary-500 text-gray-900" : "bg-transparent text-gray-400"}`}>
+          <div className={`rounded-xl p-1.5 transition-colors ${isActive ? "bg-primary-100 text-primary-700" : "bg-transparent text-gray-400"}`}>
             <Icon className="h-5 w-5" />
           </div>
           <span>{item.label}</span>
@@ -99,12 +100,12 @@ function SidebarAvatar({ name }: { name: string }) {
       <img
         src={`/avatars/${avatar}`}
         alt="avatar"
-        className="h-10 w-10 rounded-full object-cover shadow-sm"
+        className="h-10 w-10 rounded-full object-cover"
       />
     );
   }
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-500 text-sm font-bold text-gray-900 shadow-sm">
+    <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-200 text-sm font-bold text-primary-800">
       {name.charAt(0)}
     </div>
   );
@@ -121,41 +122,57 @@ export default function Layout() {
 
   return (
     <div className="flex h-screen bg-surface-50">
-      <aside className="hidden w-64 flex-col border-r border-gray-200/50 bg-white shadow-sidebar md:flex z-10">
+      <aside className="hidden w-64 flex-col border-r border-gray-200/60 bg-white shadow-sidebar md:flex z-10">
+        {/* Logo */}
         <div className="flex h-16 items-center gap-3 px-6">
-          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gray-900">
-            <HeartHandshake className="h-5 w-5 text-primary-500" />
+          <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-100">
+            <HeartHandshake className="h-5 w-5 text-primary-700" />
           </div>
-          <div>
-            <h1 className="text-lg font-bold text-gray-900 tracking-tight">CareVisit</h1>
-            <p className="text-[10px] font-bold text-gray-400 uppercase tracking-wider -mt-0.5">家電訪管理幫手</p>
+          <div className="flex items-center gap-2">
+            <div>
+              <h1 className="text-lg font-bold text-gray-900 tracking-tight">CareSync</h1>
+              <p className="text-[10px] font-medium text-gray-400 uppercase tracking-wider -mt-0.5">家電訪管理幫手</p>
+            </div>
+            <button
+              onClick={() => navigate("/tutorial")}
+              title="教學中心"
+              className="text-gray-300 hover:text-amber-500 transition-colors"
+            >
+              <Lightbulb className="w-4 h-4" />
+            </button>
           </div>
         </div>
-        <nav className="flex-1 space-y-1 px-4 pt-4">
+
+        <nav className="flex-1 space-y-0.5 px-3 pt-4">
           {navItems.map((item) => (
             <SidebarLink key={item.to} item={item} isAdmin={isAdmin} />
           ))}
         </nav>
-        <div className="px-4 pb-4">
+
+        <div className="px-3 pb-3">
           <button
             onClick={() => setChatOpen(true)}
-            className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-sm transition-all ${
+            className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all ${
               chatOpen
-                ? "bg-gray-900 text-primary-500 font-semibold shadow-md"
-                : "font-semibold text-gray-500 hover:bg-surface-100 hover:text-gray-900"
+                ? "bg-primary-700 text-white font-semibold"
+                : "font-medium text-gray-500 hover:bg-surface-100 hover:text-gray-800"
             }`}
           >
             <Bot className="h-5 w-5" />
             <span>AI 助理</span>
           </button>
         </div>
+
         {user && (
           <div className="border-t border-gray-100 px-5 py-4">
             <div className="flex items-center gap-3">
-              <SidebarAvatar name={user.name} />
+              <div className="relative">
+                <SidebarAvatar name={user.name} />
+                <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full bg-emerald-400 ring-2 ring-white" />
+              </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-bold text-gray-900">{user.name}</p>
-                <p className="text-xs font-medium text-gray-500">{user.role === "admin" ? "管理員" : "督導員"}</p>
+                <p className="truncate text-sm font-semibold text-gray-900">{user.name}</p>
+                <p className="text-xs text-gray-400">{user.role === "admin" ? "管理員" : "督導員"}</p>
               </div>
               <button
                 onClick={() => navigate("/admin/audit")}
@@ -172,8 +189,17 @@ export default function Layout() {
       <div className="flex flex-1 flex-col relative text-gray-900">
         <header className="flex h-14 items-center justify-between bg-white px-4 shadow-topbar md:px-6">
           <h2 className="flex items-center gap-2 text-base font-bold text-gray-900 md:hidden">
-            <HeartHandshake className="h-5 w-5 text-primary-600" />
-            CareVisit
+            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-100">
+              <HeartHandshake className="h-4 w-4 text-primary-700" />
+            </div>
+            CareSync
+            <button
+              onClick={() => navigate("/tutorial")}
+              title="教學中心"
+              className="text-gray-300 hover:text-amber-500 transition-colors"
+            >
+              <Lightbulb className="w-4 h-4" />
+            </button>
           </h2>
           <div className="ml-auto flex items-center gap-2">
             <ChatToggleButton onClick={toggleChat} />
@@ -194,20 +220,20 @@ export default function Layout() {
           <ChatPanel open={chatOpen} onClose={() => setChatOpen(false)} />
         </div>
 
-        <nav className="fixed inset-x-0 bottom-0 flex border-t border-gray-200/60 bg-white/80 backdrop-blur-lg md:hidden overflow-x-auto safe-area-pb">
+        <nav className="fixed inset-x-0 bottom-0 flex border-t border-gray-200/60 bg-white/90 backdrop-blur-lg md:hidden overflow-x-auto safe-area-pb">
           {mobileNavItems.map((item) => (
             <BottomTabLink key={item.to} item={item} isAdmin={isAdmin} />
           ))}
           <button
             onClick={() => setChatOpen(true)}
             className={`flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition-colors ${
-              chatOpen ? "text-gray-900" : "text-gray-400"
+              chatOpen ? "text-primary-700" : "text-gray-400"
             }`}
           >
             <div
               className={`rounded-xl p-1.5 transition-colors ${
                 chatOpen
-                  ? "bg-primary-500 text-gray-900"
+                  ? "bg-primary-100 text-primary-700"
                   : "bg-transparent text-gray-400"
               }`}
             >

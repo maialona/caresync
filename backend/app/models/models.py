@@ -122,6 +122,10 @@ class CaseProfile(Base):
     address: Mapped[str | None] = mapped_column(String(300), nullable=True)
     district: Mapped[str | None] = mapped_column(String(50), nullable=True)
     road: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    case_number: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    city: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    service_start_date: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    home_service_worker: Mapped[str | None] = mapped_column(String(100), nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=utcnow, onupdate=utcnow)
 

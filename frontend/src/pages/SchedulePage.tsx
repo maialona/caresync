@@ -119,12 +119,12 @@ function ComplianceSummaryCards({
             key={String(c.key)}
             onClick={() => onFilter(isActive ? null : c.key)}
             className={`group relative card card-hover overflow-hidden p-5 text-left transition-all ${
-              isActive ? "ring-2 ring-gray-900" : ""
+              isActive ? "ring-2 ring-primary-600" : ""
             }`}
           >
             <div className="flex items-center justify-between">
-              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${isActive ? "bg-primary-500 text-gray-900 shadow-sm" : "bg-surface-100"}`}>
-                <c.Icon className={`h-5 w-5 ${isActive ? "text-gray-900" : c.iconClass}`} />
+              <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${isActive ? "bg-primary-200 text-primary-800 shadow-sm" : "bg-surface-100"}`}>
+                <c.Icon className={`h-5 w-5 ${isActive ? "text-primary-800" : c.iconClass}`} />
               </div>
             </div>
             {summary === null ? (
@@ -339,7 +339,7 @@ function ScheduleEditModal({
             <button
               onClick={() => setReminderEnabled((v) => !v)}
               className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
-                reminderEnabled ? "bg-gray-900" : "bg-gray-200"
+                reminderEnabled ? "bg-primary-600" : "bg-gray-200"
               }`}
             >
               <span
@@ -588,7 +588,7 @@ export default function SchedulePage() {
                   onClick={() => handleFilter(s)}
                   className={`rounded-full px-3 py-1.5 text-xs font-semibold transition-all ${
                     statusFilter === s
-                      ? "bg-gray-900 text-primary-500"
+                      ? "bg-primary-700 text-white"
                       : "bg-surface-100 text-gray-500 hover:bg-gray-200"
                   }`}
                 >

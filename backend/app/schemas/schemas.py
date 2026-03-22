@@ -222,6 +222,10 @@ class CaseProfileOut(BaseModel):
     address: Optional[str] = None
     district: Optional[str] = None
     road: Optional[str] = None
+    case_number: Optional[str] = None
+    city: Optional[str] = None
+    service_start_date: Optional[str] = None
+    home_service_worker: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -238,6 +242,10 @@ class CaseProfileCreate(BaseModel):
     address: Optional[str] = None
     district: Optional[str] = None
     road: Optional[str] = None
+    case_number: Optional[str] = None
+    city: Optional[str] = None
+    service_start_date: Optional[str] = None
+    home_service_worker: Optional[str] = None
 
 
 class CaseProfileUpdate(BaseModel):
@@ -249,6 +257,10 @@ class CaseProfileUpdate(BaseModel):
     address: Optional[str] = None
     district: Optional[str] = None
     road: Optional[str] = None
+    case_number: Optional[str] = None
+    city: Optional[str] = None
+    service_start_date: Optional[str] = None
+    home_service_worker: Optional[str] = None
 
 
 class ImportPreviewRow(BaseModel):
@@ -261,6 +273,10 @@ class ImportPreviewRow(BaseModel):
     address: Optional[str] = None
     district: Optional[str] = None
     road: Optional[str] = None
+    case_number: Optional[str] = None
+    city: Optional[str] = None
+    service_start_date: Optional[str] = None
+    home_service_worker: Optional[str] = None
     action: Literal["create", "update"]
 
 

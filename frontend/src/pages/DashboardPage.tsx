@@ -63,7 +63,6 @@ export default function DashboardPage() {
       setDisplayedText(text.slice(0, i));
       if (i >= text.length) {
         clearInterval(typeTimer);
-        // Pause, then move to next message
         setTimeout(() => {
           let next: number;
           do {
@@ -79,51 +78,46 @@ export default function DashboardPage() {
 
   return (
     <div className="animate-fade-in space-y-6">
-      {/* Hero greeting banner */}
-      <div className="relative overflow-hidden rounded-2xl bg-gray-900 p-6 md:p-8 text-white shadow-md">
-        <div className="relative z-10">
-          <p className="text-primary-500 text-sm font-semibold tracking-wider">{greeting}，</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight">{user?.name || "使用者"}</h2>
-          <p className="mt-2 text-sm text-gray-300 font-medium leading-relaxed">
-            {displayedText}
-            <span className="inline-block w-[2px] h-[1em] bg-gray-300 align-middle ml-0.5 animate-pulse" />
-          </p>
-        </div>
-
+      {/* Hero greeting — clean & minimal */}
+      <div>
+        <h1 className="text-2xl font-bold text-gray-900 md:text-3xl">Dashboard</h1>
+        <p className="mt-1 text-gray-500">
+          <span className="font-medium text-gray-900">{greeting}，{user?.name || "使用者"}</span>
+          <span className="text-gray-400"> — </span>
+          {displayedText}
+          <span className="inline-block w-[2px] h-[1em] bg-gray-300 align-middle ml-0.5 animate-pulse" />
+        </p>
       </div>
 
-      {/* Bento grid stats */}
-      <div className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        {/* Home visits */}
-        <BentoStat
-          icon={Home}
-          value={stats?.home_visits_this_month ?? 0}
-          isLoading={loadingStats}
-          label="本月家訪"
-          className="col-span-1"
-        />
-        <BentoStat
-          icon={Phone}
-          value={stats?.phone_visits_this_month ?? 0}
-          isLoading={loadingStats}
-          label="本月電訪"
-          className="col-span-1"
-        />
-        <BentoStat
-          icon={FileEdit}
-          value={stats?.pending_records ?? 0}
-          isLoading={loadingStats}
-          label="待完成紀錄"
-          highlight
-          className="col-span-1"
-        />
-        <BentoStat
-          icon={ClipboardList}
-          value={stats?.total_records ?? 0}
-          isLoading={loadingStats}
-          label="總紀錄數"
-          className="col-span-1"
-        />
+      {/* Performance stats — single card with dividers like Emitly */}
+      <div className="card p-0">
+        <div className="grid grid-cols-2 divide-x divide-gray-100 lg:grid-cols-4">
+          <StatCell
+            label="本月家訪"
+            value={stats?.home_visits_this_month ?? 0}
+            isLoading={loadingStats}
+            icon={Home}
+          />
+          <StatCell
+            label="本月電訪"
+            value={stats?.phone_visits_this_month ?? 0}
+            isLoading={loadingStats}
+            icon={Phone}
+          />
+          <StatCell
+            label="待完成紀錄"
+            value={stats?.pending_records ?? 0}
+            isLoading={loadingStats}
+            icon={FileEdit}
+            highlight
+          />
+          <StatCell
+            label="總紀錄數"
+            value={stats?.total_records ?? 0}
+            isLoading={loadingStats}
+            icon={ClipboardList}
+          />
+        </div>
       </div>
 
       {/* Quick actions */}
@@ -160,24 +154,24 @@ export default function DashboardPage() {
         />
       </div>
 
-      {/* Activity timeline hint */}
+      {/* Recent records */}
       <div className="card p-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-100">
-              <Calendar className="h-4 w-4 text-gray-900" />
+              <Calendar className="h-4 w-4 text-gray-600" />
             </div>
             <h3 className="text-base font-bold text-gray-900">近期紀錄</h3>
           </div>
           <button
             onClick={() => navigate("/records")}
-            className="flex items-center gap-1.5 text-xs font-bold text-gray-500 hover:text-gray-900 transition-colors uppercase tracking-wider"
+            className="flex items-center gap-1.5 text-xs font-semibold text-gray-500 hover:text-gray-900 transition-colors"
           >
             查看全部
-            <ArrowRight className="h-4 w-4" />
+            <ArrowRight className="h-3.5 w-3.5" />
           </button>
         </div>
-        <div className="mt-4 space-y-3">
+        <div className="mt-4 space-y-2">
           {stats?.recent_records && stats.recent_records.length > 0 ? (
             stats.recent_records.map((record) => (
               <ActivityItem
@@ -199,49 +193,35 @@ export default function DashboardPage() {
 
 /* ─── Sub-components ─── */
 
-function BentoStat({
-  icon: Icon,
-  value,
+function StatCell({
   label,
-  trend,
-  highlight,
+  value,
   isLoading,
-  className = "",
+  highlight,
 }: {
-  icon: LucideIcon;
-  value: number;
   label: string;
-  trend?: string;
-  highlight?: boolean;
+  value: number;
   isLoading?: boolean;
-  className?: string;
+  icon: LucideIcon;
+  highlight?: boolean;
 }) {
   return (
-    <div
-      className={`group relative card card-hover overflow-hidden p-5 ${className} ${
-        highlight ? "ring-2 ring-gray-900" : ""
-      }`}
-    >
-      <div className="relative">
-        <div className="flex items-center justify-between">
-          <div className={`flex h-10 w-10 items-center justify-center rounded-xl ${highlight ? 'bg-primary-500 text-gray-900 shadow-sm' : 'bg-surface-100 text-gray-900'}`}>
-            <Icon className="h-5 w-5" />
-          </div>
-          {trend && !isLoading && (
-            <span className="flex items-center gap-1 rounded-full bg-gray-900 px-2.5 py-1 text-[11px] font-bold tracking-wide text-primary-500">
-              <TrendingUp className="h-3 w-3" />
-              {trend}
-            </span>
-          )}
-        </div>
+    <div className="px-5 py-5 lg:px-6">
+      <p className="text-sm text-gray-500">{label}</p>
+      <div className="mt-2 flex items-baseline gap-3">
         {isLoading ? (
-           <div className="mt-4 h-9 w-16 animate-pulse rounded bg-gray-200" />
+          <div className="h-8 w-16 animate-pulse rounded bg-gray-100" />
         ) : (
-           <p className="mt-4 text-3xl font-black tracking-tight text-gray-900">
-             {value}
-           </p>
+          <p className={`text-3xl font-bold tracking-tight ${highlight ? "text-amber-600" : "text-gray-900"}`}>
+            {value.toLocaleString()}
+          </p>
         )}
-        <p className="mt-1 text-sm font-semibold text-gray-500">{label}</p>
+        {!isLoading && (
+          <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-600">
+            <TrendingUp className="h-3 w-3" />
+            本月
+          </span>
+        )}
       </div>
     </div>
   );
@@ -265,19 +245,19 @@ function QuickAction({
   return (
     <button
       onClick={onClick}
-      className={`group relative flex w-full flex-col items-start gap-4 rounded-2xl border p-5 text-left transition-all duration-300 hover:-translate-y-1 ${
+      className={`group relative flex w-full flex-col items-start gap-4 rounded-2xl border p-5 text-left transition-all duration-200 hover:-translate-y-0.5 cursor-pointer ${
         highlight
-          ? "border-gray-900 bg-gray-900 text-white shadow-md"
+          ? "border-primary-700 bg-primary-700 text-white"
           : "border-gray-200 bg-white hover:border-gray-300 hover:shadow-card-hover"
       }`}
     >
       <div className="relative">
         <div
-          className={`flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 ${
-            highlight ? "bg-primary-500 text-gray-900" : alert ? "bg-orange-50 text-orange-500" : "bg-surface-100 text-gray-900"
+          className={`flex h-11 w-11 items-center justify-center rounded-xl transition-transform duration-200 group-hover:scale-105 ${
+            highlight ? "bg-white/10 text-white" : alert ? "bg-orange-50 text-orange-500" : "bg-primary-50 text-primary-700"
           }`}
         >
-          <Icon className="h-6 w-6" />
+          <Icon className="h-5 w-5" />
         </div>
         {alert && (
           <span className="absolute -top-1 -right-1 h-3 w-3 rounded-full bg-orange-500 ring-2 ring-white" />
@@ -285,12 +265,12 @@ function QuickAction({
       </div>
       <div>
         <div className="flex items-center gap-2">
-          <p className={`text-base font-bold ${highlight ? "text-white" : alert ? "text-orange-600" : "text-gray-900"}`}>
+          <p className={`text-sm font-semibold ${highlight ? "text-white" : alert ? "text-orange-600" : "text-gray-900"}`}>
             {title}
           </p>
-          <ArrowRight className={`h-4 w-4 transition-transform duration-300 group-hover:translate-x-1 ${highlight ? "text-primary-500" : alert ? "text-orange-400" : "text-gray-400"}`} />
+          <ArrowRight className={`h-3.5 w-3.5 transition-transform duration-200 group-hover:translate-x-1 ${highlight ? "text-gray-400" : alert ? "text-orange-400" : "text-gray-400"}`} />
         </div>
-        <p className={`mt-1 text-xs font-medium ${highlight ? "text-gray-400" : "text-gray-500"}`}>
+        <p className={`mt-1 text-xs ${highlight ? "text-gray-400" : "text-gray-500"}`}>
           {desc}
         </p>
       </div>
@@ -311,35 +291,31 @@ function ActivityItem({
   return (
     <div
       onClick={onClick}
-      className="group flex cursor-pointer items-center justify-between rounded-2xl border border-gray-100 bg-white p-4 transition-all duration-300 hover:border-gray-300 hover:shadow-card-hover hover:-translate-y-0.5"
+      className="group flex cursor-pointer items-center justify-between rounded-xl p-3 transition-all duration-200 hover:bg-surface-100"
     >
-      <div className="flex items-center gap-4">
-        <div
-          className="flex h-11 w-11 items-center justify-center rounded-xl bg-surface-100 text-gray-900 transition-transform duration-300 group-hover:scale-110"
-        >
-          <Icon className="h-5 w-5" />
+      <div className="flex items-center gap-3">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-100 text-gray-600 group-hover:bg-white">
+          <Icon className="h-4 w-4" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5 leading-none">
-            <p className="truncate text-sm font-bold text-gray-900">{record.case_name}</p>
+            <p className="truncate text-sm font-semibold text-gray-900">{record.case_name}</p>
             {record.org_name && (
-              <span className="shrink-0 text-xs font-medium text-gray-400">{record.org_name}</span>
+              <span className="shrink-0 text-xs text-gray-400">{record.org_name}</span>
             )}
           </div>
-          <p className="mt-1.5 truncate text-xs font-semibold text-gray-400">
+          <p className="mt-1 truncate text-xs text-gray-400">
             {record.visit_date.slice(0, 10)}
           </p>
         </div>
       </div>
-      <div className="flex shrink-0 items-center gap-4">
+      <div className="flex shrink-0 items-center gap-3">
         {isCompleted ? (
-          <CheckCircle2 className="h-5 w-5 text-gray-400" />
+          <CheckCircle2 className="h-4 w-4 text-emerald-400" />
         ) : (
           <span className="badge-yellow">草稿</span>
         )}
-        <div className="flex h-8 w-8 items-center justify-center rounded-full bg-surface-50 text-gray-300 transition-all group-hover:bg-gray-900 group-hover:text-primary-500">
-          <ArrowRight className="h-4 w-4" />
-        </div>
+        <ArrowRight className="h-4 w-4 text-gray-300 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:text-gray-500" />
       </div>
     </div>
   );

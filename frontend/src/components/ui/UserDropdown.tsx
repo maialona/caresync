@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { ChevronDown, LogOut, Shield, Pencil, Lock } from "lucide-react";
+import { ChevronDown, LogOut, Shield, Pencil, Lock, Palette } from "lucide-react";
 import { useAuthStore } from "../../store/authStore";
 import api from "../../api/axios";
 
@@ -15,7 +15,17 @@ const AVATARS = [
   "tiger.png",
 ];
 
-type View = "main" | "avatar" | "password";
+const THEMES = [
+  { id: "green",  label: "綠色",  hex: "#4a5929" },
+  { id: "orange", label: "橘色",  hex: "#86471a" },
+  { id: "pink",   label: "粉紅色", hex: "#862c3f" },
+  { id: "blue",   label: "水藍色", hex: "#244e6e" },
+  { id: "purple", label: "紫色",  hex: "#4f3c70" },
+  { id: "brown",  label: "咖啡色", hex: "#5a4024" },
+] as const;
+
+type ThemeId = typeof THEMES[number]["id"];
+type View = "main" | "avatar" | "password" | "theme";
 
 interface UserDropdownProps {
   name: string;
@@ -29,6 +39,9 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<View>("main");
   const [avatar, setAvatar] = useState<string | null>(user?.avatar || null);
+  const [theme, setTheme] = useState<ThemeId>(
+    () => (localStorage.getItem("caresync_theme") as ThemeId) || "green"
+  );
 
   // password change
   const [pwdCurrent, setPwdCurrent] = useState("");
@@ -58,6 +71,13 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+  const handleSelectTheme = (id: ThemeId) => {
+    setTheme(id);
+    localStorage.setItem("caresync_theme", id);
+    document.documentElement.setAttribute("data-theme", id);
+    setView("main");
+  };
 
   const handleSelectAvatar = async (file: string) => {
     if (!user) return;
@@ -146,7 +166,7 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
                   {avatarLarge}
                   <button
                     onClick={(e) => { e.stopPropagation(); goTo("avatar"); }}
-                    className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-gray-900 text-white shadow-sm transition-transform hover:scale-110"
+                    className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-primary-700 text-white shadow-sm transition-transform hover:scale-110"
                   >
                     <Pencil className="h-2.5 w-2.5" />
                   </button>
@@ -161,6 +181,13 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
               </div>
               <div className="mx-3 border-t border-gray-100" />
               <button
+                onClick={() => goTo("theme")}
+                className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-surface-50"
+              >
+                <Palette className="h-4 w-4" />
+                主題顏色
+              </button>
+              <button
                 onClick={() => goTo("password")}
                 className="flex w-full items-center gap-2.5 px-4 py-2.5 text-sm text-gray-600 transition-colors hover:bg-surface-50"
               >
@@ -174,6 +201,39 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
               >
                 <LogOut className="h-4 w-4" />
                 登出
+              </button>
+            </>
+          )}
+
+          {/* ── Theme picker ── */}
+          {view === "theme" && (
+            <>
+              <div className="px-4 py-2.5">
+                <p className="text-xs font-bold uppercase tracking-wider text-gray-400">主題顏色</p>
+              </div>
+              <div className="grid grid-cols-3 gap-2 px-4 pb-3">
+                {THEMES.map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => handleSelectTheme(t.id)}
+                    title={t.label}
+                    className={`flex items-center justify-center rounded-xl p-2 transition-all hover:bg-surface-100 hover:scale-105 ${
+                      theme === t.id ? "ring-2 ring-primary-500 bg-primary-50" : ""
+                    }`}
+                  >
+                    <span
+                      className="h-8 w-8 rounded-full shadow-sm"
+                      style={{ backgroundColor: t.hex }}
+                    />
+                  </button>
+                ))}
+              </div>
+              <div className="mx-3 border-t border-gray-100" />
+              <button
+                onClick={() => setView("main")}
+                className="flex w-full items-center justify-center px-4 py-2 text-xs font-semibold text-gray-500 transition-colors hover:text-gray-900"
+              >
+                返回
               </button>
             </>
           )}
@@ -255,7 +315,7 @@ export default function UserDropdown({ name, role, onLogout }: UserDropdownProps
                 <button
                   onClick={handleChangePassword}
                   disabled={pwdSaving || pwdSuccess}
-                  className="flex-1 rounded-lg bg-gray-900 py-1.5 text-xs font-semibold text-white hover:bg-gray-700 disabled:opacity-50 transition-colors"
+                  className="flex-1 rounded-lg bg-primary-700 py-1.5 text-xs font-semibold text-white hover:bg-primary-800 disabled:opacity-50 transition-colors"
                 >
                   {pwdSaving ? "更新中…" : "確認"}
                 </button>

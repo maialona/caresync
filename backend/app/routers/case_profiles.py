@@ -37,14 +37,25 @@ def _require_delete_perm(user: User) -> None:
 
 COLUMN_MAP = {
     "姓名": "name",
+    "個案姓名": "name",
+    "主責督導": "supervisor",
     "居督": "supervisor",
     "身分證字號": "id_number",
+    "身份證字號": "id_number",
     "性別": "gender",
+    "個案性別": "gender",
+    "目前狀態": "service_status",
     "服務狀態": "service_status",
+    "電話": "phone",
     "手機": "phone",
+    "個案居住地址": "address",
     "通訊地址": "address",
+    "鄉鎮區": "district",       # 出現兩次，後者（居住）覆蓋前者（戶籍）
     "通訊鄉鎮區": "district",
-    "通訊路段": "road",
+    "案號": "case_number",
+    "個案居住縣市": "city",
+    "服務開始時間": "service_start_date",
+    "主責居服員": "home_service_worker",
 }
 
 
@@ -254,10 +265,15 @@ async def import_preview(
 
         header_row = all_rows[0]
         headers = [str(h).strip() if h is not None else "" for h in header_row]
+        # PREFER_LAST: 這些欄位有重複標頭時取「最後出現」的那欄
+        # 例如「鄉鎮區」出現兩次（戶籍/居住），居住排後面，所以取最後一筆
+        PREFER_LAST = {"district"}
         col_index: dict[str, int] = {}
         for i, h in enumerate(headers):
             if h in COLUMN_MAP:
-                col_index[COLUMN_MAP[h]] = i
+                field = COLUMN_MAP[h]
+                if field not in col_index or field in PREFER_LAST:
+                    col_index[field] = i
 
         if "id_number" not in col_index or "name" not in col_index:
             raise HTTPException(status_code=400, detail="Excel 缺少必要欄位：姓名 或 身分證字號")
@@ -290,6 +306,10 @@ async def import_preview(
                 "address": get("address"),
                 "district": get("district"),
                 "road": get("road"),
+                "case_number": get("case_number"),
+                "city": get("city"),
+                "service_start_date": get("service_start_date"),
+                "home_service_worker": get("home_service_worker"),
             })
 
         # Check existing id_numbers
@@ -349,6 +369,10 @@ async def import_confirm(
                     address=row.address,
                     district=row.district,
                     road=row.road,
+                    case_number=row.case_number,
+                    city=row.city,
+                    service_start_date=row.service_start_date,
+                    home_service_worker=row.home_service_worker,
                 )
                 .on_conflict_do_update(
                     constraint="case_profiles_org_id_id_number_key",
@@ -361,6 +385,10 @@ async def import_confirm(
                         "address": row.address,
                         "district": row.district,
                         "road": row.road,
+                        "case_number": row.case_number,
+                        "city": row.city,
+                        "service_start_date": row.service_start_date,
+                        "home_service_worker": row.home_service_worker,
                         "updated_at": utcnow(),
                     },
                 )

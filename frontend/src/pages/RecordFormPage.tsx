@@ -80,7 +80,7 @@ export default function RecordFormPage() {
 
   // Step 3
   const [outputFormat, setOutputFormat] = useState<OutputFormat>(
-    "bullet",
+    "narrative",
   );
   const [tone, setTone] = useState<ToneStyle>(() => {
     return (localStorage.getItem("carevisit_tone") as ToneStyle) || "professional";
@@ -245,17 +245,6 @@ export default function RecordFormPage() {
       doCheckGaps();
     }, 500);
   }, [autoRefine, rawInput, doRefine, doCheckGaps]);
-
-  // Format switch with confirmation
-  const handleFormatSwitch = (fmt: OutputFormat) => {
-    if (fmt === outputFormat) return;
-    if (refinedContent.trim()) {
-      pendingFormatRef.current = fmt;
-      setShowFormatConfirm(true);
-    } else {
-      setOutputFormat(fmt);
-    }
-  };
 
   const confirmFormatSwitch = () => {
     const nextFmt = pendingFormatRef.current;
@@ -511,11 +500,11 @@ export default function RecordFormPage() {
                     disabled={isEdit}
                     className={`flex flex-1 items-center justify-center gap-2 rounded-xl border px-3 py-3 text-sm font-bold transition-all min-h-[48px] ${
                       active
-                        ? "border-gray-900 bg-gray-900 text-primary-500 shadow-md"
+                        ? "border-primary-600 bg-primary-700 text-white shadow-md"
                         : "border-gray-200 text-gray-500 hover:border-gray-300 hover:bg-surface-50"
                     } disabled:opacity-60`}
                   >
-                    <Icon className={`h-4 w-4 ${active ? "text-primary-500" : "text-gray-400"}`} />
+                    <Icon className={`h-4 w-4 ${active ? "text-white" : "text-gray-400"}`} />
                     {t === "home" ? "家訪" : "電訪"}
                   </button>
                 );
@@ -580,12 +569,12 @@ export default function RecordFormPage() {
               {gaps.map((gap) => (
                 <div
                   key={gap.section}
-                  className="group relative inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-bold text-primary-500 shadow-sm"
+                  className="group relative inline-flex items-center gap-1.5 rounded-lg bg-primary-100 px-3 py-1.5 text-xs font-bold text-primary-700 shadow-sm"
                 >
                   {gap.section}
-                  <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-900 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
+                  <div className="pointer-events-none absolute bottom-full left-1/2 z-10 mb-2 -translate-x-1/2 whitespace-nowrap rounded-lg bg-gray-700 px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100">
                     {gap.hint}
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-900" />
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-gray-700" />
                   </div>
                 </div>
               ))}
@@ -609,7 +598,7 @@ export default function RecordFormPage() {
             type="button"
             onClick={() => doRefine()}
             disabled={refining || !rawInput.trim()}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-500 px-5 py-2.5 text-sm font-black text-gray-900 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm min-h-[44px]"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-200 px-5 py-2.5 text-sm font-black text-primary-800 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:brightness-105 disabled:opacity-50 disabled:hover:translate-y-0 disabled:hover:shadow-sm min-h-[44px]"
           >
             {refining ? (
               <>
@@ -627,26 +616,6 @@ export default function RecordFormPage() {
 
         {/* Settings row — compact, secondary visual weight */}
         <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
-          {/* Format toggle */}
-          <div className="inline-flex rounded-lg border border-gray-200 bg-surface-50 p-0.5">
-            {(["bullet", "narrative"] as const).map((fmt) => (
-              <button
-                key={fmt}
-                type="button"
-                onClick={() => handleFormatSwitch(fmt)}
-                className={`rounded-md px-3 py-1.5 text-xs font-bold transition-all ${
-                  outputFormat === fmt
-                    ? "bg-gray-900 text-white shadow-sm"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                {fmt === "bullet" ? "條列式" : "敘述式"}
-              </button>
-            ))}
-          </div>
-
-          <div className="hidden sm:block h-5 w-px bg-gray-200" />
-
           {/* Tone selector */}
           <div className="inline-flex rounded-lg border border-gray-200 bg-surface-50 p-0.5">
             {([
@@ -661,7 +630,7 @@ export default function RecordFormPage() {
                 onClick={() => setTone(value)}
                 className={`rounded-md px-2.5 py-1.5 text-xs font-bold transition-all ${
                   tone === value
-                    ? "bg-gray-900 text-white shadow-sm"
+                    ? "bg-primary-700 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
@@ -681,12 +650,12 @@ export default function RecordFormPage() {
               aria-checked={autoRefine}
               onClick={() => setAutoRefine(!autoRefine)}
               className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                autoRefine ? "bg-gray-900" : "bg-gray-300"
+                autoRefine ? "bg-primary-600" : "bg-gray-300"
               }`}
             >
               <span
                 className={`inline-block h-3.5 w-3.5 rounded-full transition-transform shadow-sm ${
-                  autoRefine ? "translate-x-[18px] bg-primary-500" : "translate-x-[3px] bg-white"
+                  autoRefine ? "translate-x-[18px] bg-white" : "translate-x-[3px] bg-white"
                 }`}
               />
             </button>
@@ -709,7 +678,7 @@ export default function RecordFormPage() {
                   onClick={() => setViewMode(mode)}
                   className={`inline-flex items-center gap-1.5 px-4 py-2.5 text-xs font-bold transition-all border-b-2 -mb-px ${
                     viewMode === mode
-                      ? "border-gray-900 text-gray-900 bg-white"
+                      ? "border-primary-700 text-gray-900 bg-white"
                       : "border-transparent text-gray-400 hover:text-gray-600 hover:bg-surface-100"
                   }`}
                 >
@@ -802,7 +771,7 @@ export default function RecordFormPage() {
             type="button"
             onClick={() => save("completed")}
             disabled={saving}
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-6 py-3 text-sm font-black tracking-wide text-primary-500 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md disabled:opacity-60"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-700 px-6 py-3 text-sm font-black tracking-wide text-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:bg-primary-800 disabled:opacity-60"
           >
             <CheckCircle className="h-5 w-5" />
             完成紀錄
@@ -843,7 +812,7 @@ export default function RecordFormPage() {
 function StepHeader({ number, title }: { number: number; title: string }) {
   return (
     <div className="flex items-center gap-3">
-      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-gray-900 text-sm font-black text-primary-500">
+      <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-200 text-sm font-black text-primary-800">
         {number}
       </span>
       <h3 className="text-lg font-bold text-gray-900">{title}</h3>

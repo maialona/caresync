@@ -15,10 +15,17 @@ async def seed() -> None:
         await conn.run_sync(Base.metadata.create_all)
 
     # Add avatar column if missing (for databases created before avatar feature)
+    is_sqlite = str(engine.url).startswith("sqlite")
     async with engine.begin() as conn:
-        await conn.execute(text(
-            "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar VARCHAR(50)"
-        ))
+        if is_sqlite:
+            try:
+                await conn.execute(text("ALTER TABLE users ADD COLUMN avatar VARCHAR(50)"))
+            except Exception:
+                pass  # column already exists
+        else:
+            await conn.execute(text(
+                "ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar VARCHAR(50)"
+            ))
 
     async with async_session() as session:  # type: AsyncSession
         # Check if already seeded

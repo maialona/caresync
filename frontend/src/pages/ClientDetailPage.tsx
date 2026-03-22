@@ -78,12 +78,12 @@ export default function ClientDetailPage() {
       <div className="flex items-center gap-3">
         <button
           onClick={() => navigate("/clients")}
-          className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-100 text-gray-500 transition-colors hover:bg-gray-900 hover:text-white"
+          className="flex h-10 w-10 items-center justify-center rounded-xl bg-surface-100 text-gray-500 transition-colors hover:bg-primary-100 hover:text-primary-700"
         >
           <ArrowLeft className="h-5 w-5" />
         </button>
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900">
-          <Users className="h-5 w-5 text-primary-500" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100">
+          <Users className="h-5 w-5 text-primary-700" />
         </div>
         <div>
           <h2 className="text-xl font-bold text-gray-900">{caseName}</h2>
@@ -139,8 +139,8 @@ export default function ClientDetailPage() {
                     <div
                       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
                         isHome
-                          ? "bg-gray-900 text-primary-500"
-                          : "bg-gray-900 text-emerald-400"
+                          ? "bg-primary-100 text-primary-700"
+                          : "bg-emerald-100 text-emerald-600"
                       }`}
                     >
                       {isHome ? <Home className="h-4.5 w-4.5" /> : <Phone className="h-4.5 w-4.5" />}
@@ -174,8 +174,8 @@ export default function ClientDetailPage() {
                     <div
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-200 ${
                         isExpanded
-                          ? "bg-gray-900 text-white"
-                          : "bg-surface-100 text-gray-400 group-hover:bg-gray-900 group-hover:text-white"
+                          ? "bg-primary-700 text-white"
+                          : "bg-surface-100 text-gray-400 group-hover:bg-primary-700 group-hover:text-white"
                       }`}
                     >
                       <ChevronDown
@@ -225,7 +225,7 @@ export default function ClientDetailPage() {
                           </button>
                           <button
                             onClick={() => navigate(`/records/${r.id}/edit`)}
-                            className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-bold text-primary-500 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                            className="inline-flex items-center gap-2 rounded-xl bg-primary-700 px-4 py-2.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:shadow-md hover:bg-primary-800"
                           >
                             <FileEdit className="h-4 w-4" />
                             編輯紀錄

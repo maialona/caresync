@@ -115,7 +115,7 @@ export default function PhotoUploader({ onOcrComplete }: PhotoUploaderProps) {
             type="button"
             onClick={handleOcr}
             disabled={processing}
-            className="inline-flex items-center gap-1 rounded-md bg-gray-900 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-gray-800 disabled:opacity-50"
+            className="inline-flex items-center gap-1 rounded-md bg-primary-700 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-primary-800 disabled:opacity-50"
           >
             {processing ? (
               <>

@@ -47,6 +47,19 @@ export default function CaseProfileFormModal({ editing, onSave, onClose }: Props
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">目前狀態</label>
+              <select name="service_status" defaultValue={editing?.service_status ?? ""} className="input-base">
+                <option value="">不指定</option>
+                <option value="服務中">服務中</option>
+                <option value="暫停">暫停</option>
+                <option value="結案">結案</option>
+              </select>
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">案號</label>
+              <input name="case_number" defaultValue={editing?.case_number ?? ""} className="input-base" />
+            </div>
+            <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
                 姓名 <span className="text-red-500">*</span>
               </label>
@@ -56,6 +69,15 @@ export default function CaseProfileFormModal({ editing, onSave, onClose }: Props
                 defaultValue={editing?.name}
                 className="input-base"
               />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">性別</label>
+              <select name="gender" defaultValue={editing?.gender ?? ""} className="input-base">
+                <option value="">不指定</option>
+                <option value="男性">男性</option>
+                <option value="女性">女性</option>
+                <option value="其他">其他</option>
+              </select>
             </div>
             <div>
               <label className="mb-1 block text-sm font-medium text-gray-700">
@@ -70,42 +92,28 @@ export default function CaseProfileFormModal({ editing, onSave, onClose }: Props
               />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">居督</label>
-              <input name="supervisor" defaultValue={editing?.supervisor ?? ""} className="input-base" />
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">性別</label>
-              <select name="gender" defaultValue={editing?.gender ?? ""} className="input-base">
-                <option value="">不指定</option>
-                <option value="男">男</option>
-                <option value="女">女</option>
-                <option value="其他">其他</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">服務狀態</label>
-              <select name="service_status" defaultValue={editing?.service_status ?? ""} className="input-base">
-                <option value="">不指定</option>
-                <option value="服務中">服務中</option>
-                <option value="暫停">暫停</option>
-                <option value="結案">結案</option>
-              </select>
-            </div>
-            <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">手機</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">電話</label>
               <input name="phone" defaultValue={editing?.phone ?? ""} className="input-base" />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">通訊地址</label>
+              <label className="mb-1 block text-sm font-medium text-gray-700">主責督導</label>
+              <input name="supervisor" defaultValue={editing?.supervisor ?? ""} className="input-base" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">主責居服員</label>
+              <input name="home_service_worker" defaultValue={editing?.home_service_worker ?? ""} className="input-base" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">鄉鎮區</label>
+              <input name="district" defaultValue={editing?.district ?? ""} className="input-base" />
+            </div>
+            <div>
+              <label className="mb-1 block text-sm font-medium text-gray-700">個案居住地址</label>
               <input name="address" defaultValue={editing?.address ?? ""} className="input-base" />
             </div>
             <div>
-              <label className="mb-1 block text-sm font-medium text-gray-700">通訊鄉鎮區</label>
-              <input name="district" defaultValue={editing?.district ?? ""} className="input-base" />
-            </div>
-            <div className="col-span-2">
-              <label className="mb-1 block text-sm font-medium text-gray-700">通訊路段</label>
-              <input name="road" defaultValue={editing?.road ?? ""} className="input-base" />
+              <label className="mb-1 block text-sm font-medium text-gray-700">服務開始時間</label>
+              <input name="service_start_date" defaultValue={editing?.service_start_date ?? ""} className="input-base" placeholder="例：2024/01/01" />
             </div>
           </div>
 

@@ -50,8 +50,8 @@ export default function ClientsPage() {
     <div className="animate-fade-in space-y-5">
       {/* Page header */}
       <div className="flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900">
-          <Users className="h-5 w-5 text-primary-500" />
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100">
+          <Users className="h-5 w-5 text-primary-700" />
         </div>
         <div>
           <h2 className="text-xl font-bold text-gray-900">訪視歷程</h2>
@@ -113,7 +113,7 @@ export default function ClientsPage() {
                 className="group rounded-2xl border border-gray-200/60 bg-white p-5 text-left shadow-card transition-all duration-200 hover:-translate-y-0.5 hover:shadow-card-hover"
               >
                 <div className="mb-3 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900 text-primary-500">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 text-primary-700">
                     <Users className="h-4.5 w-4.5" />
                   </div>
                   <p className="text-[15px] font-bold text-gray-900">{c.case_name}</p>

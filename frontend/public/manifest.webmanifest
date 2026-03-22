@@ -1,6 +1,6 @@
 {
-  "name": "CareVisit 長照家訪管理系統",
-  "short_name": "CareVisit",
+  "name": "CareSync 長照家訪管理系統",
+  "short_name": "CareSync",
   "description": "長照家訪管理系統",
   "start_url": "/",
   "display": "standalone",

@@ -1,4 +1,4 @@
-# CareVisit 長照紀錄管理系統
+# CareSync 長照紀錄管理系統
 
 這是一個結合 FastAPI (後端) 與 React + Vite (前端) 的長照管理系統，支援 AI 潤飾與語音紀錄功能。
 

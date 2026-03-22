@@ -165,8 +165,8 @@ export default function ChatPage() {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-gray-200 pb-4">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900 shadow-sm">
-            <Bot className="h-5 w-5 text-primary-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100 shadow-sm">
+            <Bot className="h-5 w-5 text-primary-700" />
           </div>
           <div>
             <h2 className="text-xl font-black tracking-tight text-gray-900">長照小幫手</h2>
@@ -234,7 +234,7 @@ export default function ChatPage() {
             key={p.label}
             onClick={() => sendMessage(p.message)}
             disabled={sending}
-            className="rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:-translate-y-0.5 hover:border-gray-900 hover:bg-gray-900 hover:text-white hover:shadow-sm disabled:opacity-50 disabled:hover:translate-y-0"
+            className="rounded-full border border-gray-200 bg-white px-4 py-2 text-xs font-bold text-gray-600 transition-all hover:-translate-y-0.5 hover:border-primary-600 hover:bg-primary-700 hover:text-white hover:shadow-sm disabled:opacity-50 disabled:hover:translate-y-0"
           >
             {p.label}
           </button>

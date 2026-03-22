@@ -109,7 +109,7 @@ export default function SectionRefiner({
                   type="button"
                   onClick={() => handleRefineSection(section)}
                   disabled={refiningId !== null}
-                  className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-2.5 py-1.5 text-xs font-bold text-primary-500 shadow-md transition-all hover:shadow-lg disabled:opacity-50"
+                  className="inline-flex items-center gap-1.5 rounded-lg bg-primary-700 px-2.5 py-1.5 text-xs font-bold text-white shadow-md transition-all hover:shadow-lg hover:bg-primary-800 disabled:opacity-50"
                   title="重新潤飾此段落"
                 >
                   {isRefining ? (

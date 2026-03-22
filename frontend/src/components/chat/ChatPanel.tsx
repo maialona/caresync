@@ -261,8 +261,8 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
       {/* Header */}
       <div className="flex h-14 shrink-0 items-center justify-between border-b border-gray-100 px-4">
         <div className="flex items-center gap-2.5">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-900 shadow-sm">
-            <Bot className="h-4.5 w-4.5 text-primary-500" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-100 shadow-sm">
+            <Bot className="h-4.5 w-4.5 text-primary-700" />
           </div>
           <h3 className="text-sm font-bold tracking-wide text-gray-900">AI 助理</h3>
         </div>
@@ -271,7 +271,7 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
             onClick={() => setShowTips((v) => !v)}
             className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
               showTips
-                ? "bg-gray-900 text-primary-500"
+                ? "bg-primary-100 text-primary-700"
                 : "text-gray-400 hover:bg-surface-100 hover:text-gray-700"
             }`}
             title="使用說明"
@@ -315,7 +315,7 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
                         sendMessage(tip.prompt);
                       }}
                       disabled={sending}
-                      className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-xs font-medium text-gray-700 transition-all hover:border-gray-900 hover:bg-gray-900 hover:text-white disabled:opacity-50"
+                      className="flex w-full items-center justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-left text-xs font-medium text-gray-700 transition-all hover:border-primary-600 hover:bg-primary-700 hover:text-white disabled:opacity-50"
                     >
                       <span>{tip.label}</span>
                       <ChevronRight className="h-3 w-3 shrink-0 opacity-50" />
@@ -386,7 +386,7 @@ export default function ChatPanel({ open, onClose }: ChatPanelProps) {
             key={p.label}
             onClick={() => sendMessage(p.message)}
             disabled={sending}
-            className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-bold text-gray-500 transition-all hover:-translate-y-0.5 hover:border-gray-900 hover:bg-gray-900 hover:text-white hover:shadow-sm disabled:hover:translate-y-0 disabled:opacity-50"
+            className="rounded-full border border-gray-200 bg-white px-3 py-1 text-[11px] font-bold text-gray-500 transition-all hover:-translate-y-0.5 hover:border-primary-600 hover:bg-primary-700 hover:text-white hover:shadow-sm disabled:hover:translate-y-0 disabled:opacity-50"
           >
             {p.label}
           </button>

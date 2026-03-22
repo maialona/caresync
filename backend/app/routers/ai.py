@@ -31,90 +31,51 @@ router = APIRouter(prefix="/ai", tags=["ai"])
 AUDIO_TYPES = {"audio/webm", "audio/mp4", "audio/m4a", "audio/wav", "audio/mpeg", "video/webm"}
 IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 
-BULLET_SYSTEM = (
+UNIFIED_BULLET_SYSTEM = (
     "你是長照督導員的文書助理，請將以下家電訪粗稿整理為"
     "專業的條列式紀錄，使用繁體中文。"
-    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個子項目之間的 <br> 空行）：\n\n"
-    "<h4>一、訪視概述</h4>\n"
+    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個大標題之間的 <br> 空行）：\n\n"
+    "<h4>一、案主近況</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>1. 【個案生心理狀況】</h5>\n<ul><li>…</li></ul>\n"
+    "<h4>二、服務追蹤</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>2. 【居家環境】</h5>\n<ul><li>…</li></ul>\n"
+    "<h4>三、反映事項</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>3. 【主要照顧者照顧項】</h5>\n<ul><li>…</li></ul>\n"
+    "<h4>四、照服員回饋</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>4. 【主要照顧者身心狀況】</h5>\n<ul><li>…</li></ul>\n"
+    "<h4>五、是否借貸推銷不當金錢往來</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>5. 【社交狀況】</h5>\n<ul><li>…</li></ul>\n"
+    "<h4>六、處遇計畫</h4>\n<ul><li>…</li></ul>\n"
     "<br>\n"
-    "<h5>6. 【個案服務需求】</h5>\n<ul><li>…</li></ul>\n"
-    "<br>\n"
-    "<h5>7. 【居服員服務品質】</h5>\n<ul><li>…</li></ul>\n"
-    "<br>\n"
-    "<h4>二、主要問題歸納</h4>\n<ul><li>…</li></ul>\n"
-    "<br>\n"
-    "<h4>三、處遇</h4>\n<ul><li>…</li></ul>\n"
-    "<br>\n"
-    "<h4>四、追蹤事項</h4>\n<ul><li>…</li></ul>\n\n"
-    "重要：每個 <h5> 子項目之間、每個 <h4> 大標題之間都必須加上 <br> 空行，這是強制要求。"
+    "<h4>七、追蹤</h4>\n<ul><li>…</li></ul>\n\n"
+    "重要：每個 <h4> 大標題之間都必須加上 <br> 空行，這是強制要求。"
     "若粗稿中某些項目無相關資訊，可簡要標註「無特殊狀況」。"
     "不要使用「・」符號，不要輸出 markdown，語氣專業簡潔。"
+    "照顧組合碼（如 BA01、BA02、BA07 等）必須原樣保留，英文字母後面接的是阿拉伯數字（0-9），絕對不可以將數字「0」寫成英文字母「O」。"
 )
 
-NARRATIVE_SYSTEM = (
+UNIFIED_NARRATIVE_SYSTEM = (
     "你是長照督導員的文書助理，請將以下家電訪粗稿整理為"
     "專業的敘述式紀錄，使用繁體中文，以流暢的段落書寫，"
     "語氣正式專業。"
-    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個子項目之間的 <br> 空行）：\n\n"
-    "<h4>一、訪視概述</h4>\n"
+    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個大標題之間的 <br> 空行）：\n\n"
+    "<h4>一、案主近況</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>1. 【個案生心理狀況】</h5>\n<p>…</p>\n"
+    "<h4>二、服務追蹤</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>2. 【居家環境】</h5>\n<p>…</p>\n"
+    "<h4>三、反映事項</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>3. 【主要照顧者照顧項】</h5>\n<p>…</p>\n"
+    "<h4>四、照服員回饋</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>4. 【主要照顧者身心狀況】</h5>\n<p>…</p>\n"
+    "<h4>五、是否借貸推銷不當金錢往來</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>5. 【社交狀況】</h5>\n<p>…</p>\n"
+    "<h4>六、處遇計畫</h4>\n<p>…</p>\n"
     "<br>\n"
-    "<h5>6. 【個案服務需求】</h5>\n<p>…</p>\n"
-    "<br>\n"
-    "<h5>7. 【居服員服務品質】</h5>\n<p>…</p>\n"
-    "<br>\n"
-    "<h4>二、主要問題歸納</h4>\n<p>…</p>\n"
-    "<br>\n"
-    "<h4>三、處遇</h4>\n<p>…</p>\n"
-    "<br>\n"
-    "<h4>四、追蹤事項</h4>\n<p>…</p>\n\n"
-    "重要：每個 <h5> 子項目之間、每個 <h4> 大標題之間都必須加上 <br> 空行，這是強制要求。"
+    "<h4>七、追蹤</h4>\n<p>…</p>\n\n"
+    "重要：每個 <h4> 大標題之間都必須加上 <br> 空行，這是強制要求。"
     "若粗稿中某些項目無相關資訊，可簡要標註「無特殊狀況」。"
     "不要輸出 markdown。"
-)
-
-PHONE_BULLET_SYSTEM = (
-    "你是長照督導員的文書助理，請將以下電訪粗稿整理為"
-    "專業的條列式紀錄，使用繁體中文。"
-    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個子項目之間的 <br> 空行）：\n\n"
-    "<h5>1. 【身體狀況】</h5>\n<ul><li>…</li></ul>\n"
-    "<br>\n"
-    "<h5>2. 【服務狀況】</h5>\n<ul><li>…</li></ul>\n\n"
-    "重要：兩個子項目之間必須加上 <br> 空行，這是強制要求。"
-    "若粗稿中某些項目無相關資訊，可簡要標註「無特殊狀況」。"
-    "不要使用「・」符號，不要輸出 markdown，語氣專業簡潔。"
-)
-
-PHONE_NARRATIVE_SYSTEM = (
-    "你是長照督導員的文書助理，請將以下電訪粗稿整理為"
-    "專業的敘述式紀錄，使用繁體中文，以流暢的段落書寫，"
-    "語氣正式專業。"
-    "請直接輸出 HTML 格式，架構如下（請嚴格遵守，包括每個子項目之間的 <br> 空行）：\n\n"
-    "<h5>1. 【身體狀況】</h5>\n<p>…</p>\n"
-    "<br>\n"
-    "<h5>2. 【服務狀況】</h5>\n<p>…</p>\n\n"
-    "重要：兩個子項目之間必須加上 <br> 空行，這是強制要求。"
-    "若粗稿中某些項目無相關資訊，可簡要標註「無特殊狀況」。"
-    "不要輸出 markdown。"
+    "照顧組合碼（如 BA01、BA02、BA07 等）必須原樣保留，英文字母後面接的是阿拉伯數字（0-9），絕對不可以將數字「0」寫成英文字母「O」。"
 )
 
 TONE_INSTRUCTIONS = {
@@ -238,10 +199,7 @@ async def refine(
             detail="請提供需要潤飾的文字",
         )
 
-    if body.visit_type == "phone":
-        base_prompt = PHONE_BULLET_SYSTEM if body.format == "bullet" else PHONE_NARRATIVE_SYSTEM
-    else:
-        base_prompt = BULLET_SYSTEM if body.format == "bullet" else NARRATIVE_SYSTEM
+    base_prompt = UNIFIED_BULLET_SYSTEM if body.format == "bullet" else UNIFIED_NARRATIVE_SYSTEM
     tone_hint = TONE_INSTRUCTIONS.get(body.tone, TONE_INSTRUCTIONS["professional"])
     system_prompt = f"{base_prompt}\n\n語氣風格要求：{tone_hint}"
     visit_label = "家訪" if body.visit_type == "home" else "電訪"
@@ -308,10 +266,7 @@ async def refine_stream(
             detail="請提供需要潤飾的文字",
         )
 
-    if body.visit_type == "phone":
-        base_prompt = PHONE_BULLET_SYSTEM if body.format == "bullet" else PHONE_NARRATIVE_SYSTEM
-    else:
-        base_prompt = BULLET_SYSTEM if body.format == "bullet" else NARRATIVE_SYSTEM
+    base_prompt = UNIFIED_BULLET_SYSTEM if body.format == "bullet" else UNIFIED_NARRATIVE_SYSTEM
     tone_hint = TONE_INSTRUCTIONS.get(body.tone, TONE_INSTRUCTIONS["professional"])
     system_prompt = f"{base_prompt}\n\n語氣風格要求：{tone_hint}"
     visit_label = "家訪" if body.visit_type == "home" else "電訪"
@@ -377,29 +332,18 @@ async def refine_stream(
 
 # ---------- check-gaps ----------
 
-GAPS_SYSTEM = (
-    "你是長照督導員的文書助理。請分析以下家訪粗稿，判斷是否缺少以下重要項目的描述：\n"
-    "1. 個案生心理狀況\n"
-    "2. 居家環境\n"
-    "3. 主要照顧者照顧項\n"
-    "4. 主要照顧者身心狀況\n"
-    "5. 社交狀況\n"
-    "6. 個案服務需求\n"
-    "7. 居服員服務品質\n\n"
+UNIFIED_GAPS_SYSTEM = (
+    "你是長照督導員的文書助理。請分析以下家電訪粗稿，判斷是否缺少以下重要項目的描述：\n"
+    "1. 案主近況\n"
+    "2. 服務追蹤\n"
+    "3. 反映事項\n"
+    "4. 照服員回饋\n"
+    "5. 是否借貸推銷不當金錢往來\n"
+    "6. 處遇計畫\n"
+    "7. 追蹤\n\n"
     "請只回傳 JSON 陣列，每個元素是一個物件，包含：\n"
     '- "section": 缺少的項目名稱（上述 1-7 的名稱）\n'
-    '- "hint": 一句簡短的建議提示（例如「建議補充個案目前的情緒狀態與身體狀況」）\n\n'
-    "如果粗稿內容充分涵蓋所有項目，請回傳空陣列 []。\n"
-    "只輸出 JSON，不要加任何說明文字。"
-)
-
-PHONE_GAPS_SYSTEM = (
-    "你是長照督導員的文書助理。請分析以下電訪粗稿，判斷是否缺少以下重要項目的描述：\n"
-    "1. 身體狀況\n"
-    "2. 服務狀況\n\n"
-    "請只回傳 JSON 陣列，每個元素是一個物件，包含：\n"
-    '- "section": 缺少的項目名稱（上述 1-2 的名稱）\n'
-    '- "hint": 一句簡短的建議提示（例如「建議補充個案目前的身體狀況與自覺症狀」）\n\n'
+    '- "hint": 一句簡短的建議提示（例如「建議補充案主目前的身心狀況與近期變化」）\n\n'
     "如果粗稿內容充分涵蓋所有項目，請回傳空陣列 []。\n"
     "只輸出 JSON，不要加任何說明文字。"
 )
@@ -415,7 +359,7 @@ async def check_gaps(
 
     client = _get_client()
     visit_label = "家訪" if body.visit_type == "home" else "電訪"
-    gaps_prompt = PHONE_GAPS_SYSTEM if body.visit_type == "phone" else GAPS_SYSTEM
+    gaps_prompt = UNIFIED_GAPS_SYSTEM
 
     try:
         response = await client.chat.completions.create(
@@ -462,6 +406,7 @@ SECTION_SYSTEM = (
     "2. 保留原始的 HTML 標籤結構（h4/h5/ul/li/p 等）\n"
     "3. 不要輸出 markdown，直接輸出 HTML\n"
     "4. 可以適度補充細節或改善語句流暢度，但不要改變原意\n"
+    "5. 照顧組合碼（如 BA01、BA02、BA07 等）必須原樣保留，英文字母後面接的是阿拉伯數字（0-9），絕對不可以將數字「0」寫成英文字母「O」\n"
 )
 
 

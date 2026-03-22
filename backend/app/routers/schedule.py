@@ -1,17 +1,17 @@
 from __future__ import annotations
 
 import uuid
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy import or_, select, text
+from sqlalchemy import func, or_, select, text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.compliance import compute_compliance
 from app.core.database import get_db
 from app.deps import get_current_user
-from app.models.models import CaseProfile, MonthlyVisitSchedule, User, UserRole, VisitSchedule, utcnow
+from app.models.models import CaseProfile, MonthlyVisitSchedule, User, UserRole, VisitRecord, VisitSchedule, utcnow
 from app.schemas.schemas import (
     CaseComplianceItem,
     ComplianceStatus,
@@ -37,24 +37,26 @@ def _case_filter(query, current_user: User):
 async def _get_last_visits(db: AsyncSession, case_ids: List[uuid.UUID]):
     """
     Return dict: case_profile_id -> {"phone": date|None, "home": date|None}
-    Uses DISTINCT ON to get the latest completed record per (case, visit_type).
+    Gets the latest completed record per (case, visit_type).
+    Uses ORM to stay compatible with both SQLite and PostgreSQL.
     """
     if not case_ids:
         return {}
 
-    result = await db.execute(
-        text("""
-            SELECT DISTINCT ON (case_profile_id, visit_type)
-                case_profile_id,
-                visit_type,
-                visit_date::date AS visit_date
-            FROM visit_records
-            WHERE case_profile_id = ANY(:ids)
-              AND status = 'completed'
-            ORDER BY case_profile_id, visit_type, visit_date DESC
-        """),
-        {"ids": case_ids},
+    # Subquery: max visit_date per (case_profile_id, visit_type)
+    subq = (
+        select(
+            VisitRecord.case_profile_id,
+            VisitRecord.visit_type,
+            func.max(VisitRecord.visit_date).label("last_date"),
+        )
+        .where(
+            VisitRecord.case_profile_id.in_(case_ids),
+            VisitRecord.status == "completed",
+        )
+        .group_by(VisitRecord.case_profile_id, VisitRecord.visit_type)
     )
+    result = await db.execute(subq)
     rows = result.fetchall()
 
     data: dict[uuid.UUID, dict] = {}
@@ -62,11 +64,14 @@ async def _get_last_visits(db: AsyncSession, case_ids: List[uuid.UUID]):
         cid = row.case_profile_id
         if cid not in data:
             data[cid] = {"phone": None, "home": None}
-        vtype = row.visit_type
-        vdate = row.visit_date if isinstance(row.visit_date, date) else row.visit_date
-        if vtype == "phone":
+        vdate = row.last_date
+        if isinstance(vdate, str):
+            vdate = datetime.fromisoformat(vdate).date()
+        elif hasattr(vdate, "date"):
+            vdate = vdate.date()
+        if row.visit_type == "phone":
             data[cid]["phone"] = vdate
-        elif vtype == "home":
+        elif row.visit_type == "home":
             data[cid]["home"] = vdate
     return data
 

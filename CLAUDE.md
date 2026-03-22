@@ -1,4 +1,4 @@
-# CareVisit 專案指南
+# CareSync 專案指南
 
 ## 架構
 

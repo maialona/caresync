@@ -102,6 +102,10 @@ export interface CaseProfile {
   address?: string;
   district?: string;
   road?: string;
+  case_number?: string;
+  city?: string;
+  service_start_date?: string;
+  home_service_worker?: string;
   created_at: string;
   updated_at: string;
 }
@@ -116,6 +120,10 @@ export interface CaseProfileCreate {
   address?: string;
   district?: string;
   road?: string;
+  case_number?: string;
+  city?: string;
+  service_start_date?: string;
+  home_service_worker?: string;
 }
 
 export interface CaseProfileUpdate {
@@ -127,6 +135,10 @@ export interface CaseProfileUpdate {
   address?: string;
   district?: string;
   road?: string;
+  case_number?: string;
+  city?: string;
+  service_start_date?: string;
+  home_service_worker?: string;
 }
 
 export interface ImportPreviewRow {
@@ -139,6 +151,10 @@ export interface ImportPreviewRow {
   address?: string;
   district?: string;
   road?: string;
+  case_number?: string;
+  city?: string;
+  service_start_date?: string;
+  home_service_worker?: string;
   action: "create" | "update";
 }
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Plus, Upload, Pencil, Trash2, Loader2, Search, MapPin, X, ClipboardList } from "lucide-react";
+import { Plus, Upload, Pencil, Trash2, Loader2, Search, MapPin, X, ClipboardList, Clock } from "lucide-react";
 import { caseProfilesApi } from "../../api/caseProfiles";
 import { useToast } from "../../contexts/ToastContext";
 import { usePermission } from "../../hooks/usePermission";
@@ -36,6 +36,7 @@ export default function CaseProfilesPage() {
   const [selectMode, setSelectMode] = useState(false);
 
   const [addressCase, setAddressCase] = useState<CaseProfile | null>(null);
+  const [serviceStartCase, setServiceStartCase] = useState<CaseProfile | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -201,7 +202,7 @@ export default function CaseProfilesPage() {
             <button
               onClick={() => { setMyOnly(false); setPage(1); }}
               className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all duration-200 ${
-                !myOnly ? "bg-gray-900 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-surface-100"
+                !myOnly ? "bg-primary-700 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-surface-100"
               }`}
             >
               全部個案
@@ -209,7 +210,7 @@ export default function CaseProfilesPage() {
             <button
               onClick={() => { setMyOnly(true); setPage(1); }}
               className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition-all duration-200 ${
-                myOnly ? "bg-gray-900 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-surface-100"
+                myOnly ? "bg-primary-700 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-surface-100"
               }`}
             >
               我的個案
@@ -238,20 +239,21 @@ export default function CaseProfilesPage() {
                       />
                     </th>
                   )}
+                  <th className="px-4 py-3 min-w-[5.5rem]">目前狀態</th>
+                  <th className="px-4 py-3 min-w-[5rem]">案號</th>
                   <th className="px-4 py-3 min-w-[5rem]">姓名</th>
-                  <th className="px-4 py-3 min-w-[8rem]">身分證字號</th>
-                  <th className="px-4 py-3 min-w-[5rem]">居督</th>
                   <th className="px-4 py-3 w-12 whitespace-nowrap">性別</th>
-                  <th className="px-4 py-3 min-w-[5.5rem]">服務狀態</th>
-                  <th className="px-4 py-3 min-w-[7rem]">手機</th>
-                  <th className="px-4 py-3 w-16">地址</th>
+                  <th className="px-4 py-3 min-w-[8rem]">身分證字號</th>
+                  <th className="px-4 py-3 min-w-[7rem]">電話</th>
+                  <th className="px-4 py-3 min-w-[5rem]">主責督導</th>
+                  <th className="px-4 py-3 min-w-[5rem]">主責居服員</th>
                   <th className="px-4 py-3 min-w-[6rem]">操作</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100">
                 {items.length === 0 && (
                   <tr>
-                    <td colSpan={selectMode ? 9 : 8} className="px-4 py-8 text-center text-gray-400">
+                    <td colSpan={selectMode ? 10 : 9} className="px-4 py-8 text-center text-gray-400">
                       尚無個案資料
                     </td>
                   </tr>
@@ -271,10 +273,6 @@ export default function CaseProfilesPage() {
                         />
                       </td>
                     )}
-                    <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">{c.name}</td>
-                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.id_number}</td>
-                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.supervisor ?? "-"}</td>
-                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.gender ?? "-"}</td>
                     <td className="px-4 py-3">
                       {c.service_status ? (
                         <span className={`whitespace-nowrap ${
@@ -287,22 +285,35 @@ export default function CaseProfilesPage() {
                         <span className="text-gray-400">-</span>
                       )}
                     </td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.case_number ?? "-"}</td>
+                    <td className="px-4 py-3 font-medium text-gray-800 whitespace-nowrap">{c.name}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.gender ?? "-"}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.id_number}</td>
                     <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.phone ?? "-"}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.supervisor ?? "-"}</td>
+                    <td className="px-4 py-3 text-gray-600 whitespace-nowrap">{c.home_service_worker ?? "-"}</td>
                     <td className="px-4 py-3">
-                      {(c.address || c.district || c.road) ? (
+                      <div className="flex items-center gap-1">
                         <button
-                          onClick={() => setAddressCase(c)}
-                          className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-surface-100 hover:text-primary-600"
+                          onClick={() => c.address ? setAddressCase(c) : undefined}
+                          disabled={!c.address}
+                          className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
+                            c.address ? "text-gray-400 hover:bg-surface-100 hover:text-primary-600" : "text-gray-200 cursor-default"
+                          }`}
                           title="查看地址"
                         >
                           <MapPin className="h-4 w-4" />
                         </button>
-                      ) : (
-                        <span className="text-gray-300 px-2">—</span>
-                      )}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => c.service_start_date ? setServiceStartCase(c) : undefined}
+                          disabled={!c.service_start_date}
+                          className={`flex h-8 w-8 items-center justify-center rounded-lg transition-colors ${
+                            c.service_start_date ? "text-gray-400 hover:bg-surface-100 hover:text-primary-600" : "text-gray-200 cursor-default"
+                          }`}
+                          title="服務開始時間"
+                        >
+                          <Clock className="h-4 w-4" />
+                        </button>
                         <button
                           onClick={() => navigate(`/records?case_name=${encodeURIComponent(c.name)}`)}
                           className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-surface-100 hover:text-primary-600"
@@ -404,24 +415,35 @@ export default function CaseProfilesPage() {
             <dl className="space-y-3 text-sm">
               {addressCase.address && (
                 <div>
-                  <dt className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-0.5">通訊地址</dt>
+                  <dt className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-0.5">個案居住地址</dt>
                   <dd className="text-gray-800">{addressCase.address}</dd>
-                </div>
-              )}
-              {addressCase.district && (
-                <div>
-                  <dt className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-0.5">通訊鄉鎮區</dt>
-                  <dd className="text-gray-800">{addressCase.district}</dd>
-                </div>
-              )}
-              {addressCase.road && (
-                <div>
-                  <dt className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-0.5">通訊路段</dt>
-                  <dd className="text-gray-800">{addressCase.road}</dd>
                 </div>
               )}
             </dl>
             <button onClick={() => setAddressCase(null)} className="btn-secondary mt-5 w-full">關閉</button>
+          </div>
+        </div>
+      )}
+
+      {serviceStartCase && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
+          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-modal animate-scale-in">
+            <div className="mb-4 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <Clock className="h-5 w-5 text-primary-600" />
+                <h3 className="text-base font-bold text-gray-900">{serviceStartCase.name} 的服務時間</h3>
+              </div>
+              <button onClick={() => setServiceStartCase(null)} className="rounded-lg p-1 text-gray-400 hover:bg-surface-100 hover:text-gray-700">
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+            <dl className="text-sm">
+              <div>
+                <dt className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-0.5">服務開始時間</dt>
+                <dd className="text-gray-800">{serviceStartCase.service_start_date}</dd>
+              </div>
+            </dl>
+            <button onClick={() => setServiceStartCase(null)} className="btn-secondary mt-5 w-full">關閉</button>
           </div>
         </div>
       )}

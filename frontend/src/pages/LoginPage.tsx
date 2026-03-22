@@ -52,11 +52,11 @@ export default function LoginPage() {
         <div className="card px-6 py-10 sm:px-10 sm:py-12">
           {/* Brand Header */}
           <div className="mb-10 flex flex-col items-center text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gray-900 shadow-md">
-              <HeartHandshake className="h-7 w-7 text-primary-500" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary-100 shadow-md">
+              <HeartHandshake className="h-7 w-7 text-primary-700" />
             </div>
             <h1 className="mt-5 text-2xl font-bold tracking-tight text-gray-900">
-              CareVisit <span className="text-primary-600">.</span>
+              CareSync <span className="text-primary-600">.</span>
             </h1>
             <p className="mt-2 text-sm font-medium text-gray-500 uppercase tracking-widest">
               長照家電訪管理系統
@@ -157,7 +157,7 @@ export default function LoginPage() {
         
         {/* Footer Links */}
         <p className="mt-8 text-center text-xs font-medium text-gray-400">
-          &copy; {new Date().getFullYear()} CareVisit. All rights reserved.
+          &copy; {new Date().getFullYear()} CareSync. All rights reserved.
         </p>
       </div>
     </div>

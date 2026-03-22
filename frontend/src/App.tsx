@@ -17,6 +17,7 @@ import CaseProfilesPage from "./pages/admin/CaseProfilesPage";
 import AuditLogPage from "./pages/admin/AuditLogPage";
 import AdminRoute from "./components/AdminRoute";
 import SchedulePage from "./pages/SchedulePage";
+import TutorialPage from "./pages/TutorialPage";
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const accessToken = useAuthStore((s) => s.accessToken);
@@ -35,6 +36,13 @@ export default function App() {
       fetchUser();
     }
   }, [accessToken, fetchUser]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("caresync_theme");
+    if (saved) {
+      document.documentElement.setAttribute("data-theme", saved);
+    }
+  }, []);
 
   return (
     <ToastProvider>
@@ -58,6 +66,7 @@ export default function App() {
               <Route path="/clients" element={<ClientsPage />} />
               <Route path="/clients/detail" element={<ClientDetailPage />} />
               <Route path="/schedule" element={<SchedulePage />} />
+              <Route path="/tutorial" element={<TutorialPage />} />
 
               <Route path="/admin/case-profiles" element={<CaseProfilesPage />} />
               <Route path="/admin/audit" element={<AuditLogPage />} />

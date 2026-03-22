@@ -112,8 +112,8 @@ export default function RecordsPage() {
       {/* Page header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gray-900">
-            <ClipboardList className="h-5 w-5 text-primary-500" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-100">
+            <ClipboardList className="h-5 w-5 text-primary-700" />
           </div>
           <div>
             <h2 className="text-xl font-bold text-gray-900">家電訪紀錄</h2>
@@ -122,7 +122,7 @@ export default function RecordsPage() {
         </div>
         <button
           onClick={() => navigate("/records/new")}
-          className="inline-flex items-center justify-center gap-2 rounded-xl bg-gray-900 px-5 py-2.5 text-sm font-bold text-primary-500 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md"
+          className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary-700 px-5 py-2.5 text-sm font-bold text-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md hover:bg-primary-800"
         >
           <Plus className="h-4 w-4" />
           新增紀錄
@@ -150,7 +150,7 @@ export default function RecordsPage() {
                 onClick={() => setVisitType(tab.value)}
                 className={`rounded-lg px-3.5 py-1.5 text-sm font-bold transition-all ${
                   visitType === tab.value
-                    ? "bg-gray-900 text-white shadow-sm"
+                    ? "bg-primary-700 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
@@ -166,7 +166,7 @@ export default function RecordsPage() {
                 onClick={() => setStatusFilter(o.value)}
                 className={`rounded-lg px-3.5 py-1.5 text-sm font-bold transition-all ${
                   statusFilter === o.value
-                    ? "bg-gray-900 text-white shadow-sm"
+                    ? "bg-primary-700 text-white shadow-sm"
                     : "text-gray-500 hover:text-gray-900"
                 }`}
               >
@@ -257,8 +257,8 @@ export default function RecordsPage() {
                     <div
                       className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
                         isHome
-                          ? "bg-gray-900 text-primary-500"
-                          : "bg-gray-900 text-emerald-400"
+                          ? "bg-primary-100 text-primary-700"
+                          : "bg-emerald-100 text-emerald-600"
                       }`}
                     >
                       {isHome ? (
@@ -305,8 +305,8 @@ export default function RecordsPage() {
                     <div
                       className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-200 ${
                         isExpanded
-                          ? "bg-gray-900 text-white"
-                          : "bg-surface-100 text-gray-400 group-hover:bg-gray-900 group-hover:text-white"
+                          ? "bg-primary-700 text-white"
+                          : "bg-surface-100 text-gray-400 group-hover:bg-primary-700 group-hover:text-white"
                       }`}
                     >
                       <ChevronDown
@@ -370,7 +370,7 @@ export default function RecordsPage() {
                           <div className="flex flex-wrap items-center gap-2">
                             <button
                               onClick={() => navigate(`/records/${r.id}/edit`)}
-                              className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-4 py-2.5 text-sm font-bold text-primary-500 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                              className="inline-flex items-center gap-2 rounded-xl bg-primary-700 px-4 py-2.5 text-sm font-bold text-white transition-all hover:-translate-y-0.5 hover:shadow-md hover:bg-primary-800"
                             >
                               <FileEdit className="h-4 w-4" />
                               編輯紀錄

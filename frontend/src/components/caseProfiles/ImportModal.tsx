@@ -59,7 +59,7 @@ export default function ImportModal({ onClose, onSuccess }: Props) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm p-4">
-      <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-modal animate-scale-in">
+      <div className="w-full max-w-5xl rounded-2xl bg-white p-6 shadow-modal animate-scale-in">
         <div className="mb-4 flex items-center justify-between">
           <h3 className="text-lg font-bold text-gray-900">匯入 Excel</h3>
           <button onClick={onClose} className="rounded-lg p-1 text-gray-400 hover:bg-surface-100 hover:text-gray-700">
@@ -102,7 +102,7 @@ export default function ImportModal({ onClose, onSuccess }: Props) {
         {step === "preview" && preview && (
           <div className="space-y-4">
             <div className="flex gap-2 text-sm">
-              <span className="rounded-full bg-gray-900 px-3 py-1 text-white font-medium">
+              <span className="rounded-full bg-primary-700 px-3 py-1 text-white font-medium">
                 新增 {preview.create_count} 筆
               </span>
               <span className="rounded-full bg-surface-100 border border-gray-200 px-3 py-1 text-gray-600 font-medium">
@@ -115,31 +115,45 @@ export default function ImportModal({ onClose, onSuccess }: Props) {
               )}
             </div>
 
-            <div className="max-h-80 overflow-y-auto rounded-xl border border-gray-100">
-              <table className="w-full text-sm">
+            <div className="max-h-80 overflow-auto rounded-xl border border-gray-100">
+              <table className="min-w-max text-sm">
                 <thead className="sticky top-0 bg-surface-50">
                   <tr className="border-b border-gray-100 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    <th className="px-3 py-2">狀態</th>
-                    <th className="px-3 py-2">姓名</th>
-                    <th className="px-3 py-2">身分證字號</th>
-                    <th className="px-3 py-2">居督</th>
-                    <th className="px-3 py-2">服務狀態</th>
+                    <th className="px-3 py-2 whitespace-nowrap">狀態</th>
+                    <th className="px-3 py-2 whitespace-nowrap">目前狀態</th>
+                    <th className="px-3 py-2 whitespace-nowrap">案號</th>
+                    <th className="px-3 py-2 whitespace-nowrap">姓名</th>
+                    <th className="px-3 py-2 whitespace-nowrap">性別</th>
+                    <th className="px-3 py-2 whitespace-nowrap">身分證字號</th>
+                    <th className="px-3 py-2 whitespace-nowrap">電話</th>
+                    <th className="px-3 py-2 whitespace-nowrap">主責督導</th>
+                    <th className="px-3 py-2 whitespace-nowrap">主責居服員</th>
+                    <th className="px-3 py-2 whitespace-nowrap">鄉鎮區</th>
+                    <th className="px-3 py-2 whitespace-nowrap">個案居住地址</th>
+                    <th className="px-3 py-2 whitespace-nowrap">服務開始時間</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-100">
                   {preview.rows.map((row, i) => (
                     <tr key={i} className="hover:bg-surface-50">
-                      <td className="px-3 py-2">
+                      <td className="px-3 py-2 whitespace-nowrap">
                         {row.action === "create" ? (
-                          <span className="inline-flex items-center rounded-full bg-gray-900 px-2.5 py-0.5 text-xs font-medium text-white">新增</span>
+                          <span className="inline-flex items-center rounded-full bg-primary-700 px-2.5 py-0.5 text-xs font-medium text-white">新增</span>
                         ) : (
                           <span className="badge-gray">更新</span>
                         )}
                       </td>
-                      <td className="px-3 py-2 font-medium text-gray-800">{row.name}</td>
-                      <td className="px-3 py-2 text-gray-600">{row.id_number}</td>
-                      <td className="px-3 py-2 text-gray-600">{row.supervisor ?? "-"}</td>
-                      <td className="px-3 py-2 text-gray-600">{row.service_status ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.service_status ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.case_number ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap font-medium text-gray-800">{row.name}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.gender ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.id_number}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.phone ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.supervisor ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.home_service_worker ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.district ?? "-"}</td>
+                      <td className="px-3 py-2 text-gray-600">{row.address ?? "-"}</td>
+                      <td className="px-3 py-2 whitespace-nowrap text-gray-600">{row.service_start_date ?? "-"}</td>
                     </tr>
                   ))}
                 </tbody>

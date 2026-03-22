@@ -31,7 +31,7 @@ export default function ChatMessage({
       <div
         className={`max-w-[85%] rounded-2xl px-5 py-3.5 text-sm leading-relaxed ${
           isUser
-            ? "bg-primary-500 text-gray-900 font-medium shadow-sm rounded-tr-none"
+            ? "bg-primary-100 text-gray-900 font-medium shadow-sm rounded-tr-none"
             : "bg-white border border-gray-200 text-gray-800 shadow-sm rounded-tl-none"
         }`}
       >
@@ -41,7 +41,7 @@ export default function ChatMessage({
             {functionCalls.map((fc, i) => (
               <span
                 key={i}
-                className="inline-flex items-center gap-1.5 rounded-full bg-gray-900 px-3 py-1 text-xs font-bold tracking-wide text-primary-500 shadow-sm"
+                className="inline-flex items-center gap-1.5 rounded-full bg-primary-100 px-3 py-1 text-xs font-bold tracking-wide text-primary-700 shadow-sm"
               >
                 <Search className="h-3.5 w-3.5" />
                 {friendlyFnName(fc.name)}
@@ -69,7 +69,7 @@ export default function ChatMessage({
           <div className="mt-3 pt-3 border-t border-gray-100">
             <button
               onClick={onConfirm}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-gray-900 px-4 py-2 text-xs font-bold text-primary-500 shadow-sm transition-all hover:bg-gray-700 active:scale-95"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-primary-700 px-4 py-2 text-xs font-bold text-white shadow-sm transition-all hover:bg-primary-800 active:scale-95"
             >
               <Check className="h-3.5 w-3.5" />
               確認寫入
